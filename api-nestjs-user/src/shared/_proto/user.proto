@@ -1,0 +1,258 @@
+syntax = "proto3";
+
+package users;
+
+message CreateUserDto {
+  string email = 1;
+  string username = 2;
+  string name = 3;
+  string password = 4;
+  string dob = 5;
+  string mobile = 6;
+}
+
+message EmailOrUsername {
+  string emailOrUsername = 1;
+}
+
+message LoginUserDto {
+  string emailOrUsername = 1;
+  string password = 2;
+}
+
+message User {
+  string _id = 1;
+  string name = 2;
+  string email = 3;
+  string username = 4;
+  string password = 5;
+  bool isEmailVerified = 6;
+  string role = 7;
+  string status = 8;
+  string mobile = 9;
+  string state = 10;
+  string pinCode = 11;
+  string country = 12;
+  string address = 13;
+  string city = 14;
+  string dob = 15;
+  bool isBlocked = 16;
+  bool isUsernameConfirmed = 17;
+  string lastLogin = 18;
+  string profilePicUrl = 19;
+  string updatedAt = 20;
+  string createdAt = 21;
+  string deletedAt = 22;
+  string walletAddress = 23;
+}
+
+message LoginResponse {
+  string message = 1;
+  int32 statusCode = 2;
+  User user = 3;
+  string token = 4;
+  string refreshToken = 5;
+}
+
+message UpdateProfileDto {
+  string name = 1;
+  string username = 2;
+  string newPassword = 3;
+  string mobile = 4;
+  string state = 5;
+  string city = 6;
+  string pinCode = 7;
+  string country = 8;
+  string address = 9;
+  string profilePicUrl = 10;
+}
+
+message UpdateProfileResponse {
+  string message = 1;
+  User user = 2;
+}
+
+message ListUsersDto {
+  string username = 1;
+  string status = 2;
+  string sortBy = 3;
+  int32 sortOrder = 4;
+  int32 limit = 5;
+  int32 offset = 6;
+  bool isBlocked = 7;
+  string role = 8;
+  bool isEmailVerified = 9;
+  string email = 10;
+  string mobile = 11;
+  string walletAddress = 12;
+}
+
+message ListUsersResponse {
+  repeated User users = 1;
+  int32 count = 2;
+}
+
+message MessageDef {
+  string message = 1;
+}
+
+message MessageWithStatusDef {
+  string message = 1;
+  bool success = 2;
+}
+
+message GetUsersDto {
+  repeated string userIds = 1;
+  repeated string names = 2;
+  repeated string walletAddress = 3;
+  bool isBlocked = 4;
+  string role = 5;
+  string sortBy = 6;
+  int32 sortOrder = 7;
+  int32 limit = 8;
+  int32 offset = 9;
+}
+
+message GetUserByIdDto {
+  string id = 1;
+}
+
+message UserId {
+  string id = 1;
+}
+
+message UserInfo {
+  User userInfo = 1;
+}
+
+message CheckUsernameDto {
+  string username = 1;
+}
+
+message CheckUsernameResponse {
+  bool available = 1;
+  string message = 2;
+  User user = 3;
+}
+
+message FindAddressByIdDto {
+  string id = 1;
+}
+
+message SendEmailOtpForResetPasswordDto {
+  string email = 1;
+}
+
+message SendResetResponse {
+  string message = 1;
+  bool success = 2;
+  string token = 3;
+  string email = 4;
+  string name = 5;
+  string userId = 6;
+  string otp = 7;
+}
+
+message verifyPasswordOtpDto {
+  string token = 1;
+  string otp = 2;
+}
+
+message verifyPasswordOtpDtoResponse {
+  string userId = 1;
+  string message = 2;
+  bool success = 3;
+  string otp = 4;
+}
+
+message UpdatePasswordDto {
+  string newPassword = 1;
+  string userId = 2;
+}
+
+message NoParams {}
+
+message GetUserByIdsRequest {
+  repeated string userIds = 1;
+}
+
+message GetUserByIdsResponse {
+  repeated User users = 1;
+}
+
+message SearchUserDto {
+  string searchString = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+}
+
+message SearchUserDef {
+  repeated User users = 1;
+  int32 count = 2;
+}
+
+message FindOneByUserIdDto {
+  string id = 1;
+}
+
+message FindOneByUserIdDef {
+  User user = 1;
+}
+
+message UpdateUserRoleDto {
+  string _id = 1;
+  string role = 2;
+}
+
+message GetUserIdsByRoleDto {
+  string role = 1;
+}
+
+message GetUserIdsByRole {
+  repeated string userIds = 1;
+}
+
+message CheckTokenValidityDto {
+  string token = 1;
+}
+
+message valdateTokenDto {
+  string accessToken = 1;
+  string browserId = 2;
+  string userId = 3;
+  bool isBlocaked = 4;
+  bool status = 5;
+}
+
+message GlobalResponseDef {
+  bool succes = 1;
+  string message = 2;
+}
+
+message LogoutDto {
+  string accessToken = 1;
+}
+
+service UserService {
+  rpc create(CreateUserDto) returns (LoginResponse) {}
+  rpc login(LoginUserDto) returns (LoginResponse) {}
+  rpc findOneByEmailOrUsername(EmailOrUsername) returns (User) {}
+  rpc updateProfile(UpdateProfileDto) returns (UpdateProfileResponse) {}
+  rpc findOneById(UserId) returns (User) {}
+  rpc listUsers(ListUsersDto) returns (ListUsersResponse) {}
+  rpc healthCheck(MessageDef) returns (MessageDef) {}
+  rpc getUserById(GetUserByIdDto) returns (UserInfo) {}
+  rpc getUsersByFilters(GetUsersDto) returns (ListUsersResponse) {}
+  rpc checkUsername(CheckUsernameDto) returns (CheckUsernameResponse) {}
+  rpc generateTokenForResetPassword(SendEmailOtpForResetPasswordDto) returns (SendResetResponse) {}
+  rpc decodedUserInfo(verifyPasswordOtpDto) returns (verifyPasswordOtpDtoResponse) {}
+  rpc resetPassword(UpdatePasswordDto) returns (MessageWithStatusDef) {}
+  rpc getUserByIds(GetUserByIdsRequest) returns (GetUserByIdsResponse) {}
+  rpc searchUser(SearchUserDto) returns (SearchUserDef) {}
+  rpc findOneByUserId(FindOneByUserIdDto) returns (FindOneByUserIdDef) {}
+  rpc updateUserRole(UpdateUserRoleDto) returns (MessageWithStatusDef) {}
+  rpc getUserIdsByRole(GetUserIdsByRoleDto) returns (GetUserIdsByRole) {}
+  rpc ping(NoParams) returns (MessageDef) {}
+  rpc validateToken(valdateTokenDto) returns (GlobalResponseDef) {}
+  rpc logout(LogoutDto) returns (GlobalResponseDef) {}
+}

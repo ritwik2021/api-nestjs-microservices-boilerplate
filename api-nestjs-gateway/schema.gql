@@ -1,0 +1,134 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Users {
+  """user's name"""
+  name: String
+
+  """user's email"""
+  email: String
+
+  """user's username"""
+  username: String
+
+  """user's password"""
+  password: String
+
+  """tells if email is verified"""
+  isEmailVerified: Boolean
+
+  """user's role"""
+  role: String
+
+  """user's status"""
+  status: String
+
+  """user's mobile number"""
+  mobile: String
+
+  """user's unique id"""
+  _id: String
+
+  """toggle for disabling user"""
+  isBlocked: Boolean
+
+  """user lastLogin timestamp"""
+  lastLogin: String
+
+  """user's dob"""
+  dob: String
+
+  """user's state"""
+  state: String
+
+  """user's pinCode"""
+  pinCode: String
+
+  """user's country"""
+  country: String
+
+  """user's address"""
+  address: String
+
+  """user's city"""
+  city: String
+
+  """Profile picture url of the user"""
+  profilePicUrl: String
+
+  """user updatedAt timestamp"""
+  updatedAt: String
+
+  """user createdAt timestamp"""
+  createdAt: String
+
+  """user's trash status"""
+  deletedAt: String
+
+  """user's trash status"""
+  deletedPermanentAt: String
+}
+
+type LoginUserDef {
+  """users information"""
+  user: Users
+
+  """tells the status after login"""
+  message: String
+
+  """tells about token expiration"""
+  expiresIn: String
+
+  """token for authentication"""
+  token: String
+
+  """to refresh token"""
+  refreshToken: String
+}
+
+type GlobalMessageResponse {
+  """message of the response"""
+  message: String
+
+  """success of the response"""
+  success: Boolean
+}
+
+type Query {
+  ping: String!
+}
+
+type Mutation {
+  login(input: LoginUserDto!): LoginUserDef!
+  createUser(input: CreateUserDto!): LoginUserDef!
+  logout: GlobalMessageResponse!
+}
+
+input LoginUserDto {
+  """enter user's email or username"""
+  emailOrUsername: String
+
+  """enter user's password"""
+  password: String
+}
+
+input CreateUserDto {
+  """enter the user's email"""
+  email: String!
+
+  """enter the user's username"""
+  username: String!
+
+  """enter the user's Full name"""
+  name: String!
+
+  """enter the user's password"""
+  password: String!
+
+  """enter user's mobile number"""
+  mobile: String!
+
+  """Enter the user's date of birth YYYY-MM-DD"""
+  dob: String!
+}
