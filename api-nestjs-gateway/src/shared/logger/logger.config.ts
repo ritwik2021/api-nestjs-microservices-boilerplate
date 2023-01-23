@@ -1,6 +1,6 @@
+import * as winston from 'winston';
 import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import * as winston from 'winston';
 
 const logDirectory = 'logs';
 // Create a log directory if it does not exist

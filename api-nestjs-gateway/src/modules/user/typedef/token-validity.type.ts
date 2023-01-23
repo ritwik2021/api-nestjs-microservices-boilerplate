@@ -1,6 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { IsBoolean, IsOptional, IsString } from 'class-validator';
-import { Users } from './user.type';
 
 @ObjectType()
 export class TokenValidityDef {

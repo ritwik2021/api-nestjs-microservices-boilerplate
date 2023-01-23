@@ -4,8 +4,8 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 import * as jwt from 'jsonwebtoken';
 import * as parser from 'ua-parser-js';
 
-import { ResponseHandlerModel } from '../../../shared/model/response-handler.model';
 import { UserRole } from './role.enum';
+import { ResponseHandlerModel } from '../../../shared/model/response-handler.model';
 import { ResponseMessage, JWT_SETTINGS } from '../../../shared/constant';
 import { UserService } from '../../user/user.service';
 

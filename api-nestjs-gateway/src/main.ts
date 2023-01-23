@@ -1,6 +1,8 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { GlobalExceptionFilter } from './shared/core/globalExceptionHandler';
+import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, Logger, RequestMethod, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as compression from 'compression';
 import * as xss from 'xss-clean';
@@ -9,9 +11,6 @@ import helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
 import { useContainer } from 'class-validator';
 
-import { AppModule } from './app.module';
-import { GlobalExceptionFilter } from './shared/core/globalExceptionHandler';
-
 async function main() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = await app.get(ConfigService);
@@ -19,7 +18,9 @@ async function main() {
   const port = configService.get('NODE_PORT');
   const allowedDomains = configService.get('ALLOWED_DOMAINS');
   const whitelist = allowedDomains.split(',');
-  app.setGlobalPrefix(configService.get('GLOBAL_PREFIX'));
+  app.setGlobalPrefix(configService.get('GLOBAL_PREFIX'), {
+    exclude: [{ path: 'health', method: RequestMethod.GET }]
+  });
   app.use(cookieParser());
 
   /**
@@ -85,7 +86,13 @@ async function main() {
   app.use(compression()); // Compression Settings
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.getHttpAdapter().getInstance().disable('Server');
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      errorHttpStatusCode: HttpStatus.PRECONDITION_FAILED,
+      whitelist: true,
+      transform: true
+    })
+  );
 
   // global try-catch middleware
   app.useGlobalFilters(new GlobalExceptionFilter());

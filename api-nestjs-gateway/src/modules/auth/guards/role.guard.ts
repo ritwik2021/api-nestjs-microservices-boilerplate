@@ -2,10 +2,10 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
+import { ROLES_KEY } from './auth.guards';
 import { ResponseMessage } from '../../../shared/constant/ResponseMessage';
 import { ResponseStatusCode } from '../../../shared/constant/ResponseStatusCode';
 import { ResponseHandlerModel } from '../../../shared/model/response-handler.model';
-import { ROLES_KEY } from './auth.guards';
 
 @Injectable()
 export class RoleGuard implements CanActivate {

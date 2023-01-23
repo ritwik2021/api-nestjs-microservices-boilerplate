@@ -1,15 +1,15 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc, Client } from '@nestjs/microservices';
-import { ResponseStatusCode } from 'src/shared/constant/ResponseStatusCode';
-import { GlobalMessageResponse } from 'src/shared/interfaces/general.interface';
 
-import { ResponseHandlerModel } from 'src/shared/model/response-handler.model';
-import { UserServiceInterface } from 'src/shared/_proto/interface/user.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { LoginUserDef } from './typedef/login-user.type';
 import { TokenValidityDef } from './typedef/token-validity.type';
 import { UserServiceClientOptions } from './user-svc.options';
+import { ResponseStatusCode } from '../../shared/constant/ResponseStatusCode';
+import { GlobalMessageResponse } from '../../shared/interfaces/general.interface';
+import { ResponseHandlerModel } from '../../shared/model/response-handler.model';
+import { UserServiceInterface } from '../../shared/_proto/interface/user.interface';
 
 @Injectable()
 export class UserService implements OnModuleInit {
@@ -31,8 +31,7 @@ export class UserService implements OnModuleInit {
     try {
       return (await this.userMicroService.ping({}).toPromise()).message;
     } catch (error) {
-      console.log(error);
-      await this.responseHandlerModel.error(error.message, ResponseStatusCode.INTERNAL_SERVER_ERROR);
+      this.responseHandlerModel.error(error.message, ResponseStatusCode.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -46,7 +45,7 @@ export class UserService implements OnModuleInit {
     try {
       return await this.userMicroService.login(loginUserDto).toPromise();
     } catch (error) {
-      await this.responseHandlerModel.error(error.message, ResponseStatusCode.INTERNAL_SERVER_ERROR);
+      this.responseHandlerModel.error(error.message, ResponseStatusCode.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -60,7 +59,7 @@ export class UserService implements OnModuleInit {
     try {
       return await this.userMicroService.create(createUserDto).toPromise();
     } catch (error) {
-      await this.responseHandlerModel.error(error.message, ResponseStatusCode.INTERNAL_SERVER_ERROR);
+      this.responseHandlerModel.error(error.message, ResponseStatusCode.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -84,7 +83,7 @@ export class UserService implements OnModuleInit {
       };
       return await this.userMicroService.validateToken(options).toPromise();
     } catch (error) {
-      await this.responseHandlerModel.error(error.message, ResponseStatusCode.INTERNAL_SERVER_ERROR);
+      this.responseHandlerModel.error(error.message, ResponseStatusCode.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -98,7 +97,7 @@ export class UserService implements OnModuleInit {
     try {
       return await this.userMicroService.logout({ accessToken }).toPromise();
     } catch (error) {
-      await this.responseHandlerModel.error(error.message, ResponseStatusCode.INTERNAL_SERVER_ERROR);
+      this.responseHandlerModel.error(error.message, ResponseStatusCode.INTERNAL_SERVER_ERROR);
     }
   }
 }

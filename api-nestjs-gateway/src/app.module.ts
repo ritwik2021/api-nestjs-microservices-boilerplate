@@ -1,9 +1,9 @@
-import { CacheModule, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { GraphQLModule } from '@nestjs/graphql';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CacheModule, HttpStatus, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { WinstonModule } from 'nest-winston';
 import { join } from 'path';
 
@@ -35,18 +35,20 @@ import { GlobalExceptionFilter } from './shared/core/globalExceptionHandler';
         autoSchemaFile: join(process.cwd(), 'schema.gql'),
         introspection: configService.get('ENV') === 'production' ? false : true,
         playground: configService.get('ENV') === 'production' ? false : true,
-        context: async ({ req }) => ({ req }),
+        context: ({ req }) => ({ req }),
         debug: false,
         formatError: (error: any) => {
-          console.log(error);
-          return {
-            message: error.extensions.response.error || error?.extensions?.code || error?.extensions?.error,
-            statusCode: error?.extensions?.response?.statusCode || error.extension,
-            success: false,
-            details: error?.extensions?.response?.stack || error?.extensions?.response?.error || error?.message,
-            data: error?.extensions?.response?.data,
-            timestamp: new Date().toISOString()
-          };
+          return error?.extensions?.exception?.details
+            ? JSON.parse(error?.extensions?.exception?.details)
+            : {
+                message: error?.extensions?.response?.message || error.extensions.response.error || error,
+                statusCode:
+                  error?.extensions?.response?.statusCode || error.extension || HttpStatus.INTERNAL_SERVER_ERROR,
+                success: false,
+                details: error?.extensions?.response?.stack || error?.extensions?.response?.error || error?.message,
+                data: error?.extensions?.response?.data,
+                timestamp: new Date().toISOString()
+              };
         }
       })
     }),

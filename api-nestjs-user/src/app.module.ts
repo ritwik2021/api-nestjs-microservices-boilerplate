@@ -10,6 +10,7 @@ import { envSchema } from './shared/env-schema/env-schema';
 import { loggerConfig } from './shared/logger/logger.config';
 import { LoggerMiddleware } from './shared/logger/logger.middleware';
 import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -18,16 +19,16 @@ import { UserModule } from './modules/user/user.module';
       validationSchema: envSchema,
       load: [config]
     }),
-    // MongooseModule.forRootAsync({
-    //   imports: [ConfigModule],
-    //   inject: [ConfigService],
-    //   useFactory: async (configService: ConfigService) => ({
-    //     uri: configService.get<string>('MONGODB_URI')
-    //   })
-    //   // useClass: MongooseConfigService,
-    // }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI')
+      })
+    }),
     WinstonModule.forRoot(loggerConfig),
-    UserModule
+    UserModule,
+    AuthModule
   ],
 
   controllers: [AppController],

@@ -15,7 +15,7 @@ export class ResponseHandlerModel {
    * @returns { success: boolean, statusCode: number, data: any }
    * @author Ritwik Rohitashwa
    */
-  async response(data: any, statusCode: number): Promise<{ success: boolean; statusCode: number; data: any }> {
+  response(data: any, statusCode: number): { success: boolean; statusCode: number; data: any } {
     return { success: true, statusCode, data };
   }
 

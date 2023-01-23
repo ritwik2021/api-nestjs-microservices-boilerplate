@@ -1,6 +1,6 @@
-import { join } from 'path';
 import { ClientOptions, Transport } from '@nestjs/microservices';
 import * as dotenv from 'dotenv';
+import { join } from 'path';
 dotenv.config();
 
 export const UserServiceClientOptions: ClientOptions = {

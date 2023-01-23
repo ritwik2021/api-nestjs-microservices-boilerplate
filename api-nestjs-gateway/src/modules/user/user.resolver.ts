@@ -1,13 +1,14 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+
 import { UserService } from './user.service';
 import { LoginUserDef } from './typedef/login-user.type';
 import { LoginUserDto } from './dto/login-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Users } from './typedef/user.type';
-import { GlobalMessageResponse } from 'src/shared/interfaces/general.interface';
-import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../auth/guards/auth.guards';
 import { GetRequest } from '../auth/decorators/get-user.decorator';
+import { GlobalMessageResponse } from '../../shared/interfaces/general.interface';
 
 @Resolver(() => Users)
 export class UserResolver {
